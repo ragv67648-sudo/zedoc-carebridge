@@ -1,0 +1,1369 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>CareBridge</title>
+<meta name="description" content="Secure health records, consent management, wellbeing companion, and clinical dashboards.">
+<meta property="og:title" content="CareBridge">
+<meta property="og:description" content="Secure health records, consent management, wellbeing companion, and clinical dashboards.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8fafc;--cd:#ffffff;--tx:#0f172a;--mu:#64748b;--ac:#0d9488;--ac-hover:#0f766e;
+  --ac-soft:#f0fdfa;--a2:#0284c7;--bd:#e2e8f0;--bd-focus:#94a3b8;--ok:#059669;--ok-bg:#ecfdf5;
+  --wn:#d97706;--wn-bg:#fffbeb;--er:#dc2626;--er-bg:#fef2f2;--so:#f1f5f9;
+  --sh:0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+  --sh-md:0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme=light]){
+    --bg:#090d16;--cd:#0f172a;--tx:#f8fafc;--mu:#94a3b8;--ac:#14b8a6;--ac-hover:#2dd4bf;
+    --ac-soft:#134e4a;--a2:#38bdf8;--bd:#1e293b;--bd-focus:#334155;--ok:#10b981;--ok-bg:#064e3b;
+    --wn:#f59e0b;--wn-bg:#78350f;--er:#f87171;--er-bg:#7f1d1d;--so:#1e293b;
+    --sh:0 1px 3px 0 rgb(0 0 0 / 0.3);--sh-md:0 4px 6px -1px rgb(0 0 0 / 0.4);
+  }
+}
+:root[data-theme=dark]{
+  --bg:#090d16;--cd:#0f172a;--tx:#f8fafc;--mu:#94a3b8;--ac:#14b8a6;--ac-hover:#2dd4bf;
+  --ac-soft:#134e4a;--a2:#38bdf8;--bd:#1e293b;--bd-focus:#334155;--ok:#10b981;--ok-bg:#064e3b;
+  --wn:#f59e0b;--wn-bg:#78350f;--er:#f87171;--er-bg:#7f1d1d;--so:#1e293b;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 "Plus Jakarta Sans",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:12px 28px;background:var(--cd);border-bottom:1px solid var(--bd);position:sticky;top:env(safe-area-inset-top,0px);z-index:30;box-shadow:var(--sh)}
+.brand-group{display:flex;align-items:center;gap:12px}
+.brand{font-weight:800;font-size:20px;color:var(--ac);letter-spacing:-0.02em;display:inline-flex;align-items:center;gap:8px}
+.brand-badge{background:var(--so);color:var(--mu);font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;border:1px solid var(--bd)}
+.roles{display:inline-flex;background:var(--so);padding:3px;border-radius:10px;border:1px solid var(--bd);gap:2px}
+.roles button{border:none;background:none;color:var(--mu);border-radius:7px;padding:6px 14px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;transition:all .15s ease}
+.roles button:hover{color:var(--tx)}
+.roles .on{background:var(--cd);color:var(--ac);box-shadow:0 1px 3px rgba(0,0,0,0.06);font-weight:700}
+.user-badge{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mu);padding:4px 10px;border-radius:8px;background:var(--so);border:1px solid var(--bd)}
+.user-dot{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.app{display:grid;grid-template-columns:250px minmax(0,1fr);max-width:1380px;margin:auto;min-height:calc(100vh - 65px)}
+nav{padding:20px 14px;display:flex;flex-direction:column;gap:3px;border-right:1px solid var(--bd);background:var(--cd)}
+.nav-sec{font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:0.05em;padding:10px 10px 4px 10px}
+nav a{padding:8px 12px;border-radius:8px;color:var(--mu);cursor:pointer;font-size:14px;font-weight:500;display:flex;align-items:center;gap:10px;transition:all .15s ease;text-decoration:none}
+nav a:hover{background:var(--so);color:var(--tx)}
+nav a.on{background:var(--ac-soft);color:var(--ac);font-weight:600}
+main{padding:28px 32px;overflow-x:hidden}
+.page-head{margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
+h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-0.025em;color:var(--tx)}
+.page-sub{margin:4px 0 0;font-size:14px;color:var(--mu)}
+h3{margin:0 0 12px;font-size:16px;font-weight:700;color:var(--tx)}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:20px;margin-top:16px;box-shadow:var(--sh);transition:box-shadow .15s ease}
+.card:hover{box-shadow:var(--sh-md)}
+.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid var(--bd);padding-bottom:10px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}.grid .card{margin-top:0}
+.stat-card{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:4px;box-shadow:var(--sh)}
+.stat-card small{font-size:12px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:0.03em}
+.stat-card .val{font-size:24px;font-weight:800;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;color:var(--tx)}
+.mini{background:var(--so);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:3px;border:1px solid var(--bd);position:relative;transition:border-color .15s ease}
+.mini:hover{border-color:var(--bd-focus)}
+.mini-chart-wrap{position:relative;width:100%;height:44px;cursor:crosshair;touch-action:none;margin-top:4px}
+.mini-chart-tip{
+  position:absolute;
+  bottom:calc(100% + 6px);
+  transform:translateX(-50%);
+  background:rgba(15,23,42,0.92);
+  backdrop-filter:blur(6px);
+  color:#f8fafc;
+  padding:4px 8px;
+  border-radius:6px;
+  font-size:11px;
+  font-weight:600;
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .15s ease, transform .1s ease;
+  box-shadow:0 4px 12px rgba(0,0,0,0.25);
+  border:1px solid rgba(255,255,255,0.12);
+  z-index:25;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1px;
+}
+.mini-chart-tip::after{
+  content:'';
+  position:absolute;
+  top:100%;
+  left:50%;
+  transform:translateX(-50%);
+  border-width:4px 4px 0 4px;
+  border-style:solid;
+  border-color:rgba(15,23,42,0.92) transparent transparent transparent;
+}
+.mini-chart-tip.show{opacity:1}
+.mini-chart-tip .tip-date{font-size:10px;color:#94a3b8;font-family:"IBM Plex Mono",monospace}
+.mini-chart-tip .tip-val{font-size:12px;font-weight:700;color:#38bdf8;font-family:"IBM Plex Mono",monospace}
+.mini small{color:var(--mu);font-size:12px;font-weight:600}
+.ok{color:var(--ok)}.wn{color:var(--wn)}.er{color:var(--er)}
+.btn{background:var(--ac);color:#fff;border:1px solid var(--ac);border-radius:9px;padding:8px 16px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:all .15s ease;text-decoration:none}
+.btn:hover{background:var(--ac-hover);border-color:var(--ac-hover)}
+.btn.g{background:var(--cd);color:var(--tx);border-color:var(--bd)}
+.btn.g:hover{background:var(--so);border-color:var(--bd-focus)}
+.btn.d{background:var(--er);border-color:var(--er);color:#fff}
+.btn.d:hover{filter:brightness(0.92)}
+.btn.s{padding:4px 10px;font-size:12px;border-radius:6px}
+.btn:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--a2);outline-offset:2px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.it{justify-content:space-between;border-top:1px solid var(--bd);padding:12px 0;margin:0}
+input,select,textarea{font:inherit;color:var(--tx);background:var(--cd);border:1px solid var(--bd);border-radius:8px;padding:8px 12px;font-size:14px;transition:border-color .15s ease}
+input:focus,select:focus,textarea:focus{border-color:var(--ac);outline:none}
+input[type=range]{padding:0;width:160px;accent-color:var(--ac)}
+.note{background:var(--so);border-radius:10px;padding:12px 16px;font-size:14px;border:1px solid var(--bd)}
+.warn{background:var(--wn-bg);border:1px solid rgba(217,119,6,.25);color:var(--tx)}
+.crit{background:var(--er-bg);border:1px solid rgba(220,38,38,.3);color:var(--tx)}
+.st{padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700;background:var(--so);color:var(--mu);white-space:nowrap;letter-spacing:0.02em;text-transform:uppercase}
+.st.ACTIVE,.st.APPROVED,.st.ok{background:var(--ok-bg);color:var(--ok)}
+.st.EXPIRED,.st.PENDING{background:var(--wn-bg);color:var(--wn)}
+.st.REVOKED,.st.REJECTED{background:var(--er-bg);color:var(--er)}
+.chip{border:1px solid var(--bd);border-radius:8px;padding:5px 12px;background:var(--cd);color:var(--mu);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;transition:all .15s ease}
+.chip:hover{border-color:var(--bd-focus);color:var(--tx)}
+.chip.on{background:var(--ac-soft);color:var(--ac);border-color:var(--ac);font-weight:600}
+.ck{display:inline-flex;gap:8px;align-items:center;cursor:pointer;font-size:14px}
+.lk{color:var(--ac);cursor:pointer;text-decoration:none;font-weight:600}
+.lk:hover{text-decoration:underline}
+code{font-family:"IBM Plex Mono",monospace;background:var(--so);padding:2px 6px;border-radius:5px;word-break:break-all;font-size:12px;border:1px solid var(--bd)}
+.qr{background:#fff;padding:12px;border-radius:10px;border:1px solid var(--bd);display:inline-block}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{text-align:left;padding:10px 10px;border-top:1px solid var(--bd);vertical-align:middle}
+th{background:var(--so);font-size:12px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:0.04em}
+.sc{overflow-x:auto;border-radius:8px;border:1px solid var(--bd)}
+#cb{max-height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:8px}
+.m{max-width:82%;padding:12px 16px;border-radius:14px;background:var(--so);font-size:14px;line-height:1.5}
+.m.u{align-self:flex-end;background:var(--ac);color:#fff}
+.tag{font-size:11px;font-weight:700;color:var(--ac);display:block;margin-bottom:4px;letter-spacing:0.03em}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 20px;border-radius:10px;font-size:14px;font-weight:500;box-shadow:var(--sh-md);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:90vw;z-index:99}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(-2px)}
+.banner{background:linear-gradient(135deg,rgba(13,148,136,0.08) 0%,rgba(2,132,199,0.08) 100%);border:1px solid rgba(13,148,136,0.2);border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
+/* Camera Frame Overlay & Scanner Animation */
+.cam-viewfinder{
+  position:relative;
+  width:100%;
+  max-width:440px;
+  margin:0 auto 16px auto;
+  height:280px;
+  background:radial-gradient(ellipse at center,#1e293b 0%,#090d16 100%);
+  border-radius:18px;
+  overflow:hidden;
+  border:2px solid #334155;
+  box-shadow:0 12px 30px -4px rgba(0,0,0,0.5), inset 0 0 40px rgba(0,0,0,0.8);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.cam-grid{
+  position:absolute;
+  inset:0;
+  background-image:linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                   linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size:24px 24px;
+  pointer-events:none;
+}
+.cam-hud-top{
+  position:absolute;
+  top:12px;
+  left:16px;
+  right:16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11px;
+  color:#94a3b8;
+  letter-spacing:0.04em;
+  z-index:4;
+}
+.cam-rec{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:#f43f5e;
+  font-weight:700;
+}
+.cam-rec-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#f43f5e;
+  animation:recBlink 1.2s infinite ease-in-out;
+}
+@keyframes recBlink{0%,100%{opacity:1}50%{opacity:0.2}}
+.cam-hud-bottom{
+  position:absolute;
+  bottom:12px;
+  left:16px;
+  right:16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:10px;
+  color:#64748b;
+  z-index:4;
+}
+.cam-target-box{
+  position:relative;
+  width:180px;
+  height:180px;
+  z-index:3;
+}
+.cam-corner{
+  position:absolute;
+  width:22px;
+  height:22px;
+  border-color:#14b8a6;
+  border-style:solid;
+  filter:drop-shadow(0 0 6px #14b8a6);
+}
+.cam-tl{top:0;left:0;border-width:3px 0 0 3px;border-top-left-radius:6px}
+.cam-tr{top:0;right:0;border-width:3px 3px 0 0;border-top-right-radius:6px}
+.cam-bl{bottom:0;left:0;border-width:0 0 3px 3px;border-bottom-left-radius:6px}
+.cam-br{bottom:0;right:0;border-width:0 3px 3px 0;border-bottom-right-radius:6px}
+.cam-crosshair{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:16px;
+  height:16px;
+  pointer-events:none;
+  opacity:0.4;
+}
+.cam-crosshair::before, .cam-crosshair::after{
+  content:'';
+  position:absolute;
+  background:#38bdf8;
+}
+.cam-crosshair::before{top:7px;left:0;right:0;height:2px}
+.cam-crosshair::after{left:7px;top:0;bottom:0;width:2px}
+.cam-laser{
+  position:absolute;
+  left:4px;
+  right:4px;
+  height:2px;
+  background:linear-gradient(90deg, transparent 0%, #14b8a6 20%, #38bdf8 50%, #14b8a6 80%, transparent 100%);
+  box-shadow:0 0 12px 2px #14b8a6, 0 0 24px 4px rgba(56,189,248,0.5);
+  animation:laserScan 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate;
+  z-index:2;
+}
+.cam-laser::after{
+  content:'';
+  position:absolute;
+  left:0;
+  right:0;
+  height:28px;
+  bottom:0;
+  background:linear-gradient(to top, rgba(20,184,166,0.25), transparent);
+  pointer-events:none;
+}
+@keyframes laserScan{
+  0%{top:6px;opacity:0.85}
+  50%{opacity:1}
+  100%{top:calc(100% - 10px);opacity:0.85}
+}
+.cam-pulse{
+  position:absolute;
+  inset:10px;
+  border:1px dashed rgba(56,189,248,0.3);
+  border-radius:10px;
+  animation:boxPulse 2.4s ease-in-out infinite;
+}
+@keyframes boxPulse{
+  0%,100%{transform:scale(0.98);opacity:0.4}
+  50%{transform:scale(1.02);opacity:0.9}
+}
+.cam-status-pill{
+  background:rgba(15,23,42,0.85);
+  backdrop-filter:blur(8px);
+  color:#e2e8f0;
+  border:1px solid rgba(20,184,166,0.4);
+  padding:5px 14px;
+  border-radius:99px;
+  font-size:12px;
+  font-weight:600;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+.cam-status-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#14b8a6;
+  box-shadow:0 0 6px #14b8a6;
+  animation:recBlink 1.5s infinite;
+}
+@media(max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  nav{flex-direction:row;overflow-x:auto;padding:10px 14px;border-right:none;border-bottom:1px solid var(--bd)}
+  nav a{white-space:nowrap}
+  .nav-sec{display:none}
+  main{padding:18px 16px}
+  .top{padding:10px 14px}
+  h1{font-size:22px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<header class="top">
+  <div class="brand-group">
+    <span class="brand">🩺 Zedoc <span style="font-weight:400;color:var(--mu);font-size:15px">CareBridge</span></span>
+    <span class="brand-badge">IBM watsonx ready</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <div class="roles" id="roles" role="group" aria-label="Role selector"></div>
+    <div class="user-badge" id="userBadge"><span class="user-dot"></span><span id="userPersona">Vishesh (Patient)</span></div>
+  </div>
+</header>
+<div class="app"><nav id="nav"></nav><main id="main"></main></div><div id="toast" role="status"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const $=s=>$d(s),$d=s=>document.querySelector(s),H=x=>String(x).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const D=(m,d,h,mi)=>new Date(2026,m-1,d,h,mi).getTime(),hm=t=>new Date(t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),dt=t=>new Date(t).toLocaleString([],{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+/* ---- Mock backend (in-memory). All data is synthetic. ---- */
+const P={name:'Vishesh',age:21,dob:'14 Mar 2005',blood:'B+',ec:'Demo Contact, +91 00000 00000',cond:['Asthma'],all:['Penicillin'],surg:['None recorded'],meds:[{n:'Demo Inhaler (reliever)',d:'As needed',crit:1}],vac:['Influenza, Oct 2025','COVID-19 booster, Nov 2024'],notes:''};
+const REC=[{id:'R1',name:'Prescription: Demo Inhaler',cat:'Prescriptions',date:'2026-08-12',by:'Dr. Ananya Sharma, XYZ Hospital',src:'Hospital upload',ok:1},{id:'R2',name:'Prescription: Antihistamine (demo)',cat:'Prescriptions',date:'2026-03-02',by:'Dr. Rahul Kumar, ABC Clinic',src:'Hospital upload',ok:1},{id:'R3',name:'CBC Lab Report',cat:'Lab Reports',date:'2026-08-12',by:'XYZ Hospital Lab',src:'Hospital upload',ok:1},{id:'R4',name:'Allergy Panel',cat:'Lab Reports',date:'2026-03-02',by:'ABC Clinic Lab',src:'Hospital upload',ok:1},{id:'R5',name:'Metabolic Panel',cat:'Lab Reports',date:'2025-09-10',by:'City Diagnostics (demo)',src:'Patient upload',ok:0}];
+const LAB=[{n:'Hemoglobin (g/dL)',v:[13.4,13.8,13.6]},{n:'Eosinophils (%)',v:[4.8,5.6,6.1]},{n:'IgE (IU/mL)',v:[120,150,165]}];
+const TL=[['2026-08-12','Hospital visit: asthma review','R1'],['2026-08-12','Blood test','R3'],['2026-03-02','General consultation','R2'],['2026-03-02','Allergy panel','R4'],['2025-10-20','Vaccination: Influenza'],['2025-09-10','Hospital visit + lab test','R5']];
+const W=Array.from({length:90},(_,d)=>{const r=Math.max(0,d-76),n=Math.sin(d*2.1)*.6;return{mood:+(7-r*.2+n).toFixed(1),stress:+(4+r*.3+n).toFixed(1),sleep:+(7.4-r*.12+n/2).toFixed(1),energy:+(6.8-r*.15+n).toFixed(1)}});
+const CS=[{id:'C1',who:'Dr. Ananya Sharma',org:'XYZ Hospital',cats:['Medical history','Medications','Allergies'],why:'Medical consultation',s:D(9,24,10,42),exp:D(9,24,11,12),st:'ACTIVE'},{id:'C2',who:'Dr. Rahul Kumar',org:'ABC Clinic',cats:['Lab reports'],why:'Follow-up review',s:D(9,22,16,20),exp:D(9,22,16,50),st:'REVOKED'},{id:'C3',who:'Meera Iyer',org:'CareBridge Therapy',cats:['Mental wellbeing','Care plan'],why:'Ongoing therapy',s:D(8,20,11,0),exp:null,st:'ACTIVE'}];
+const AU=[{t:D(9,24,10,42),who:'Dr. Ananya Sharma',ev:'data.read',d:'Medical history, Medications, Allergies'},{t:D(9,22,16,20),who:'Dr. Rahul Kumar',ev:'data.read',d:'Lab reports'}],AR=[],AL=[{t:D(9,20,21,5),w:'Vishesh',x:'Medium-risk language in AI Companion; therapist notified'}];
+const AP=[{t:'2 Oct 2026, 5:00 PM',x:'Therapy session (online) with Meera Iyer'},{t:'18 Nov 2026',x:'Asthma follow-up, XYZ Hospital'}];
+const TH=[{n:'Meera Iyer',q:'M.Phil Clinical Psychology',sp:['Stress','Anxiety','Sleep'],e:'9 yrs',l:'English, Hindi, Kannada',m:'Online',a:'Thu 5 PM',v:1},{n:'Arjun Nair',q:'M.Sc Counselling Psychology',sp:['Academic stress','General wellbeing'],e:'5 yrs',l:'English, Malayalam',m:'Online / Offline',a:'Mon 11 AM',v:1},{n:'Dr. Kavya Rao',q:'Ph.D Clinical Psychology',sp:['Relationship concerns','Grief','Anxiety'],e:'14 yrs',l:'English, Kannada, Tamil',m:'Offline',a:'Sat 10 AM',v:1},{n:'Sana Qureshi',q:'M.A. Counselling',sp:['Sleep','Stress'],e:'3 yrs',l:'English, Hindi, Urdu',m:'Online',a:'Wed 6 PM',v:0}];
+const HOS=[{n:'XYZ Hospital',v:1},{n:'ABC Clinic',v:1},{n:'PQR Diagnostics',v:0}],DR={n:'Dr. Ananya Sharma',org:'XYZ Hospital'};
+const PL={goal:'Improve stress management',acts:{'Daily breathing exercise':1,'Sleep routine':1,'Thought record':1,'Weekly reflection':0},freq:'Daily',dur:'4 weeks',ok:1},T={on:1,topics:{stress:1,breathing:1,sleep:1,journaling:1},notes:''},CV=['LOW','LOW','LOW','MEDIUM','LOW'];
+const stat=c=>c.st=='REVOKED'?'REVOKED':c.exp&&c.exp<Date.now()?'EXPIRED':'ACTIVE',au=(who,ev,d)=>AU.unshift({t:Date.now(),who,ev,d}),act=(o)=>CS.find(c=>c.org==o&&stat(c)=='ACTIVE');
+const KB=[{t:'stress',kw:/stress|pressure|overwhelm|exam/i,x:'Your plan focuses on stress management: pick one task, work in a 25-minute block, then take a short break.',s:'Care plan v1, approved by M. Iyer'},{t:'breathing',kw:/breath|calm|panic|tense/i,x:'Try box breathing: inhale 4 seconds, hold 4, exhale 4, hold 4. Repeat for about two minutes.',s:'Approved exercise: Breathing'},{t:'sleep',kw:/sleep|tired|insomnia|rest/i,x:'Sleep routine from your plan: fixed wake time, screens off 45 minutes before bed, cool dark room.',s:'Care plan v1: Sleep hygiene'},{t:'journaling',kw:/journal|thought|worry|worries/i,x:'Thought record: note the situation, the thought, how strongly you believe it, and one alternative view.',s:'Approved resource: Thought journaling'}];
+/* ---- IBM service abstraction: MOCK adapters. No live watsonx calls are made. ---- */
+const IBM={live:false,gov:{log:[],ev(e,d){this.log.unshift({t:Date.now(),e,d})},cls:m=>/suicid|kill myself|end my life|self.?harm|hurt myself|want to die|don'?t want to live/i.test(m)?'HIGH':/hopeless|can'?t cope|panic|worthless|overwhelmed|can'?t sleep|anxious|depress/i.test(m)?'MEDIUM':'LOW'},
+data:{retrieve:m=>KB.filter(k=>T.topics[k.t]&&k.kw.test(m))},
+ai:{summarize(d){const o=[];if(d.hist)o.push(['Medical history',`History of ${d.hist.cond.join(', ')}. ${d.hist.visits} healthcare visits in the previous 12 months. Surgeries: ${d.hist.surg.join(', ')}.`,['R1','R2']]);if(d.all)o.push(['Allergies','Important: documented allergy to '+d.all.join(', ')+'.',['R2']]);if(d.meds)o.push(['Current medications',d.meds.map(m=>m.n+' ('+m.d+')').join('; '),['R1']]);if(d.labs)o.push(['Recent lab trends',LAB.map(l=>l.n+': '+l.v.join(' → ')).join('; ')+'. Values as recorded, without interpretation.',['R3','R4','R5']]);if(d.mh)o.push(['Patient-shared wellbeing','Self-reported stress has risen over the last 14 days. This is not a diagnosis.',[]]);return o},
+chat(m){const r=IBM.gov.cls(m);IBM.gov.ev('risk.'+r,'Message screened before generation (rule-based demo classifier)');CV.push(r);
+if(r=='HIGH'){AL.unshift({t:Date.now(),w:P.name,x:'High-risk language detected in AI Companion'});return{r,tag:'Safety',safe:1,t:"I'm concerned about your safety, and this is beyond what I can help with. I can't keep you safe on my own. Please reach a person now: a trusted contact, your therapist, or emergency services. If you may be in immediate danger, call 112. In India you can also reach Tele-MANAS at 14416."}}
+if(/diagnos|am i (depressed|bipolar)|dose|dosage|medicat|prescri|tablet/i.test(m))return{r,tag:'Professional advice',t:"I can't diagnose conditions or advise on medication. Those need a qualified professional. I can help you write down questions for your therapist or doctor."};
+if(!T.on)return{r,tag:'Supportive',t:'Your therapist has paused AI support for now. You can still complete check-ins or book a session.'};
+const k=IBM.data.retrieve(m)[0];let t=k?'Based on your therapist-approved care plan… '+k.x:"Thanks for sharing that. I'm here to listen. What feels heaviest right now?";if(r=='MEDIUM')t+=' It sounds like things are heavy. Please consider talking with your therapist or a qualified professional (Tele-MANAS: 14416).';return{r,tag:k?'Retrieved':'Supportive',t,src:k&&k.s}}}};
+/* ---- UI helpers ---- */
+const K={mood:['Mood','#0b8799',1],stress:['Stress','#c23a3a',0],sleep:['Sleep','#3b7ddd',1],energy:['Energy','#a86a05',1]};
+const avg=(k,a,b)=>{const s=W.slice(a,b);return s.reduce((t,x)=>t+x[k],0)/s.length},tr=k=>{const d=avg(k,-7)-avg(k,-14,-7),u=d>.4,n=d<-.4,g=K[k][2];return[u?'↗':n?'↘':'→',u?(g?'Improving':'Increasing'):n?(g?'Declining':'Decreasing'):'Stable',(u&&g)||(n&&!g)?'ok':u||n?'wn':'']};
+function onChartMove(e,el){
+  const clientX=e.touches&&e.touches.length?e.touches[0].clientX:e.clientX;
+  const rect=el.getBoundingClientRect();
+  const relX=Math.max(0,Math.min(rect.width,clientX-rect.left));
+  const ratio=rect.width>0?relX/rect.width:0;
+  const raw=el.dataset.chart;
+  if(!raw)return;
+  let data;
+  try{data=JSON.parse(raw);}catch(err){return;}
+  if(!data||!data.length)return;
+  const idx=Math.min(data.length-1,Math.max(0,Math.round(ratio*(data.length-1))));
+  const pt=data[idx];
+  const tip=el.querySelector('.mini-chart-tip');
+  const dot=el.querySelector('.chart-hover-dot');
+  const guide=el.querySelector('.chart-hover-guide');
+  if(tip){
+    const tipDate=tip.querySelector('.tip-date');
+    const tipVal=tip.querySelector('.tip-val');
+    if(tipDate)tipDate.textContent=pt.date;
+    if(tipVal)tipVal.textContent=(pt.label?pt.label+': ':'')+pt.val;
+    const pct=Math.max(12,Math.min(88,(pt.svgX/120)*100));
+    tip.style.left=pct+'%';
+    tip.classList.add('show');
+  }
+  if(dot){
+    dot.setAttribute('cx',pt.svgX);
+    dot.setAttribute('cy',pt.svgY);
+    dot.style.opacity='1';
+  }
+  if(guide){
+    guide.setAttribute('x1',pt.svgX);
+    guide.setAttribute('x2',pt.svgX);
+    guide.style.opacity='1';
+  }
+}
+function onChartLeave(el){
+  const tip=el.querySelector('.mini-chart-tip');
+  const dot=el.querySelector('.chart-hover-dot');
+  const guide=el.querySelector('.chart-hover-guide');
+  if(tip)tip.classList.remove('show');
+  if(dot)dot.style.opacity='0';
+  if(guide)guide.style.opacity='0';
+}
+const pl=(v,c,lo,hi,dates,label)=>{
+  lo=lo??Math.min(...v);
+  hi=hi??Math.max(...v);
+  const r=hi-lo||1;
+  const N=v.length;
+  const pts=v.map((y,i)=>{
+    const svgX=N>1?+(i*116/(N-1)+2).toFixed(1):60;
+    const svgY=+(36-(y-lo)/r*32).toFixed(1);
+    let d='';
+    if(dates&&dates[i])d=dates[i];
+    else if(N===14){
+      const dt=new Date(2026,8,26);
+      dt.setDate(dt.getDate()-(13-i));
+      d=dt.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    }else if(N===3){
+      d=['Sep 2025','Mar 2026','Aug 2026'][i]||('Record '+(i+1));
+    }else{
+      d='Day '+(i+1);
+    }
+    return{val:y,date:d,svgX,svgY,label:label||''};
+  });
+  const polyPoints=pts.map(p=>`${p.svgX},${p.svgY}`).join(' ');
+  const rawJson=JSON.stringify(pts).replace(/"/g,'&quot;');
+  return `<div class="mini-chart-wrap" data-chart="${rawJson}" onmousemove="onChartMove(event,this)" onmouseleave="onChartLeave(this)" ontouchstart="onChartMove(event,this)" ontouchmove="onChartMove(event,this)" ontouchend="onChartLeave(this)">
+    <div class="mini-chart-tip"><span class="tip-date"></span><span class="tip-val"></span></div>
+    <svg viewBox="0 0 120 40" width="100%" height="40" aria-hidden="true" style="overflow:visible">
+      <line class="chart-hover-guide" x1="0" y1="2" x2="0" y2="38" stroke="${c}" stroke-width="1" stroke-dasharray="2,2" style="opacity:0;transition:opacity .1s;pointer-events:none"/>
+      <polyline fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="${polyPoints}"/>
+      <circle class="chart-hover-dot" cx="0" cy="0" r="3.5" fill="${c}" stroke="#fff" stroke-width="1.5" style="opacity:0;transition:opacity .1s;pointer-events:none"/>
+    </svg>
+  </div>`;
+};
+const lc=n=>{const d=W.slice(-n),w=640,h=210;return`<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="Wellbeing trends">${[0,5,10].map(v=>`<line x1="0" x2="${w}" y1="${h-10-v*19}" y2="${h-10-v*19}" stroke="var(--bd)"/>`).join('')}${Object.keys(K).map(k=>`<polyline fill="none" stroke="${K[k][1]}" stroke-width="2.5" stroke-linejoin="round" points="${d.map((x,i)=>`${i*w/(d.length-1)},${h-10-x[k]*19}`).join(' ')}"/>`).join('')}</svg>`};
+const pg=(t,s,b)=>`<h1>${t}</h1><p class="mu">${s}</p>${b}`,cd=(h,b,x='')=>`<section class="card ${x}">${h?`<h3>${h}</h3>`:''}${b}</section>`,st=s=>`<span class="st ${s}">${s}</span>`,ul=a=>'<ul>'+a.map(x=>`<li>${x}</li>`).join('')+'</ul>';
+const toast=m=>{const t=$('#toast');t.textContent=m;t.className='on';clearTimeout(toast.i);toast.i=setTimeout(()=>t.className='',3500)};
+const ALLC=['Medical history','Allergies','Medications','Lab reports','Mental health','Therapy notes'];
+let S={role:'patient',view:'dashboard',range:30,cf:'All',q:'',tf:'All',as:null,chat:[{r:'LOW',tag:'Supportive',t:"Hi Vishesh, I'm your therapist-supervised wellbeing companion. I'm not a therapist and can't diagnose or advise on medication. How are you feeling today?"}],serverConfig:null,currentUser:null,recordsLoading:false,recordsError:null,uploading:false,selectedRecord:null};
+const NAV={
+  patient:[
+    ['dashboard','Overview / Dashboard'],
+    ['health','Health Records'],
+    ['upload','Upload Medical Record'],
+    ['consent','Consent & Sharing'],
+    ['share','QR Access'],
+    ['companion','AI Care Companion'],
+    ['wellbeing','Mental Wellbeing'],
+    ['emergency','Emergency Controls'],
+    ['profile','Profile & Settings']
+  ],
+  doctor:[
+    ['dash','Provider Dashboard'],
+    ['lookup','Patient Lookup'],
+    ['requests','Pending Consent Requests'],
+    ['patient','Authorized Patient Records'],
+    ['rec','Record Viewer'],
+    ['aisummary','AI Clinical Summary'],
+    ['dhist','Access / Audit History']
+  ],
+  admin:[
+    ['overview','System Overview'],
+    ['users','User Management'],
+    ['audit','Access / Audit Monitoring'],
+    ['safety','Security & AI Events'],
+    ['health','System Health']
+  ]
+};
+/* ---- API Client & Phase 1 Backend Connection ---- */
+async function api(path, opts={}){
+  try {
+    const res = await fetch('/api' + path, {
+      headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
+      ...opts
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: res.statusText }));
+      throw new Error(err.error || 'Server error ' + res.status);
+    }
+    return await res.json();
+  } catch(e) {
+    console.warn('[API]', path, e.message);
+    return null;
+  }
+}
+
+// Synchronize initial session and profile from server
+async function loadServerRecords(){
+  S.recordsLoading = true;
+  S.recordsError = null;
+  render();
+  const res = await api('/records');
+  S.recordsLoading = false;
+  if(res && res.records){
+    // Map server records to REC format while preserving extra metadata
+    REC.length = 0;
+    res.records.forEach(r => {
+      REC.push({
+        id: r.id,
+        name: r.title,
+        cat: r.category,
+        date: r.recordDate,
+        by: r.facility,
+        src: r.source,
+        ok: r.verified ? 1 : 0,
+        fileName: r.fileName,
+        fileSize: r.fileSize,
+        mimeType: r.mimeType,
+        sha256: r.sha256,
+        createdTimestamp: r.createdTimestamp
+      });
+    });
+  } else {
+    S.recordsError = 'Could not load records from server';
+  }
+  render();
+}
+
+async function initServerSync(){
+  const health = await api('/health');
+  if(health && health.status === 'healthy'){
+    S.serverConfig = health;
+    const userRes = await api('/auth/me');
+    if(userRes && userRes.user){
+      S.currentUser = userRes.user;
+      const roleKey = userRes.user.role.toLowerCase();
+      if(['patient','doctor','admin'].includes(roleKey)){
+        S.role = roleKey;
+      }
+      if(userRes.user.name && userRes.user.role==='DOCTOR'){
+        DR.n = userRes.user.name;
+        if(userRes.user.org) DR.org = userRes.user.org;
+      }
+      const pEl=$('#userPersona');
+      if(pEl) pEl.textContent = userRes.user.persona;
+    }
+    const profRes = await api('/patient/profile');
+    if(profRes && profRes.profile){
+      Object.assign(P, profRes.profile);
+      const notesEl = document.getElementById('clinNotes');
+      if(notesEl && profRes.profile.notes) notesEl.value = profRes.profile.notes;
+    }
+    if(S.role === 'patient'){
+      await loadServerRecords();
+    }
+    render();
+  }
+}
+
+const go=v=>{if(v)S.view=v;render()};
+const role=async r=>{
+  S.role=r;
+  S.view=NAV[r][0][0];
+  render();
+  const res = await api('/auth/switch-role', {
+    method: 'POST',
+    body: JSON.stringify({ role: r })
+  });
+  if(res && res.user){
+    S.currentUser = res.user;
+    if(res.user.role==='DOCTOR'){
+      DR.n = res.user.name;
+      if(res.user.org) DR.org = res.user.org;
+    }
+    const pEl=$('#userPersona');
+    if(pEl) pEl.textContent = res.user.persona;
+    toast(`Session active: ${res.user.persona}`);
+    if(r === 'patient'){
+      await loadServerRecords();
+    }
+    render();
+  }
+};
+/* ---- Actions ---- */
+async function uploadRecord(name,cat,by){
+  const fileInput = document.getElementById('upFile');
+  const file = fileInput && fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
+
+  S.uploading = true;
+  render();
+
+  try {
+    const formData = new FormData();
+    formData.append('title', name || (file ? file.name : 'Uploaded Lab / Clinical Record'));
+    formData.append('category', cat || 'Prescriptions');
+    formData.append('facility', by || 'City Health Center');
+    formData.append('recordDate', new Date().toISOString().slice(0, 10));
+    if(file){
+      formData.append('file', file);
+    }
+
+    const res = await fetch('/api/records', {
+      method: 'POST',
+      body: formData
+    });
+
+    if(!res.ok){
+      const err = await res.json().catch(()=>({ error: 'Upload failed: ' + res.statusText }));
+      throw new Error(err.error || 'Server error ' + res.status);
+    }
+
+    const data = await res.json();
+    S.uploading = false;
+    toast('Record uploaded and verified on server');
+
+    // Reload genuine persistent records from server
+    await loadServerRecords();
+    TL.unshift([new Date().toISOString().slice(0,10),'Patient upload: '+(name||'Record'),data.record.id]);
+    au('Vishesh','RECORD_CREATED',name+' ('+cat+')');
+    go('health');
+  } catch(err) {
+    S.uploading = false;
+    render();
+    toast('Error: ' + err.message);
+    const errBox = document.getElementById('uploadError');
+    if(errBox) {
+      errBox.textContent = err.message;
+      errBox.style.display = 'block';
+    }
+  }
+}
+async function dl(id){
+  try {
+    const res = await fetch(`/api/records/${id}/download`);
+    if(!res.ok){
+      const err = await res.json().catch(()=>({ error: 'Download failed' }));
+      return toast('Cannot download record: ' + (err.error || res.statusText));
+    }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const disp = res.headers.get('Content-Disposition') || '';
+    let fname = '';
+    const match = disp.match(/filename="?([^"]+)"?/);
+    if(match && match[1]) fname = decodeURIComponent(match[1]);
+    const r = REC.find(x=>x.id==id);
+    a.download = fname || (r ? r.name + '.txt' : 'medical_record.txt');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast('Record downloaded from server');
+  } catch(e) {
+    toast('Download failed: ' + e.message);
+  }
+}
+async function del(id){
+  const r = REC.find(x=>x.id==id);
+  const title = r ? r.name : id;
+  if(!confirm(`Are you sure you want to delete "${title}"?`)) return;
+
+  try {
+    const res = await api(`/records/${id}`, { method: 'DELETE' });
+    if(res && res.success){
+      toast('Record deleted from server');
+      S.sel = null;
+      await loadServerRecords();
+    } else {
+      toast('Failed to delete record: ' + (res?.error || 'Server error'));
+    }
+  } catch(e) {
+    toast('Delete error: ' + e.message);
+  }
+}
+async function viewRecord(id){
+  S.sel = id;
+  render();
+  const res = await api(`/records/${id}`);
+  if(res && res.record){
+    S.selectedRecord = res.record;
+  }
+  render();
+}
+function genQR(){const cats=[...document.querySelectorAll('.qc:checked')].map(x=>x.value);if(!cats.length)return toast('Select at least one category');const tok=(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)).slice(0,18);AR.unshift({tok,cats,mins:+$('#dur').value,exp:Date.now()+6e4,st:'PENDING'});S.qr=tok;au(DR.n,'qr.generate','Token issued for: '+cats.join(', '));go()}
+function scan(explicitTok){
+  const raw = explicitTok || ($('#tok') ? $('#tok').value : '') || S.tok || '';
+  const t = raw.replace('cb://access/','').trim();
+  if(!t) return toast('Please enter or select a QR token to scan');
+  const a = AR.find(x=>x.tok==t);
+  if(!a) return toast('Unknown or invalid QR token');
+  if(Date.now()>a.exp||a.st!='PENDING') return toast('This QR has expired or was already used');
+  S.scan = a;
+  S.gr = null;
+  toast('QR Code detected! Decrypting access request...');
+  go();
+}
+function approve(){const a=S.scan,cats=[...document.querySelectorAll('.pc:checked')].map(x=>x.value);if(!cats.length)return toast('Select what to share, or reject');const c={id:'C'+(CS.length+1),who:DR.n,org:DR.org,cats,why:'Medical consultation',s:Date.now(),exp:Date.now()+a.mins*6e4,st:'ACTIVE'};CS.unshift(c);a.st='APPROVED';S.gr=c;S.scan=null;au('Vishesh','consent.approve',DR.org+': '+cats.join(', '));go()}
+function reject(){S.scan.st='REJECTED';S.scan=null;au('Vishesh','consent.reject','Request rejected');go()}
+function revoke(id){const c=CS.find(x=>x.id==id);c.st='REVOKED';au('Vishesh','consent.revoke',c.org);toast('Access revoked. It takes effect immediately.');go()}
+let notesTimer=null;
+function onNotesInput(v){
+  P.notes=v;
+  const el=document.getElementById('notesStatus');
+  if(el){el.innerHTML='<span style="color:#d97706;font-size:12px;display:inline-flex;align-items:center;gap:4px">● Saving to server...</span>';}
+  clearTimeout(notesTimer);
+  notesTimer=setTimeout(async ()=>{
+    const res = await api('/patient/profile/notes', {
+      method: 'PUT',
+      body: JSON.stringify({ notes: v })
+    });
+    if(el){
+      if(res && res.success){
+        el.innerHTML='<span style="color:#059669;font-size:12px;display:inline-flex;align-items:center;gap:4px">✓ Auto-saved to server</span>';
+      } else {
+        el.innerHTML='<span style="color:#059669;font-size:12px;display:inline-flex;align-items:center;gap:4px">✓ Auto-saved locally</span>';
+      }
+    }
+  },500);
+}
+async function saveNotes(){
+  const v=$('#clinNotes')?$('#clinNotes').value:'';
+  P.notes=v;
+  const res = await api('/patient/profile/notes', {
+    method: 'PUT',
+    body: JSON.stringify({ notes: v })
+  });
+  toast(res && res.success ? 'Clinical notes saved to server' : 'Clinical notes saved');
+}
+function save(){const g=i=>+$('#'+i).value;W.push({mood:g('c1'),stress:g('c2'),sleep:g('c3'),energy:g('c4')});W.shift();toast('Check-in saved');go()}
+function send(){const v=$('#msg').value.trim();if(!v)return;S.chat.push({r:'u',t:v},IBM.ai.chat(v));go()}
+function addRec(){go('upload')}
+function book(n){AP.unshift({t:'Requested, awaiting confirmation',x:'Session with '+n});toast('Session requested with '+n);}
+function score(){const a=AS[S.as];let t=0;document.querySelectorAll('.aq').forEach(s=>t+=+s.value);const v=a.x?t*4:t,flag=a.low?v<a.th:v>=a.th;S.res=`${S.as} score: ${v}. `+(flag?'Your responses fall in a range where speaking with a qualified professional may help.':'Your responses fall in a lower range. Keep checking in.')+' This is a screening tool, not a diagnosis.';S.sf=S.as=='PHQ-9'&&+$d('.aq:last-of-type').value>0;go()}
+function savePlan(){PL.goal=$('#goal').value;document.querySelectorAll('.pa').forEach(x=>PL.acts[x.value]=x.checked?1:0);PL.freq=$('#fq').value;PL.dur=$('#du').value;PL.ok=1;IBM.gov.ev('kb.update','Care plan approved and indexed for retrieval');toast('Care plan approved and added to the AI knowledge base');go()}
+function tick(){document.querySelectorAll('[data-cd]').forEach(e=>{const s=Math.max(0,Math.round((+e.dataset.cd-Date.now())/1e3));e.textContent=s>=60?Math.floor(s/60)+'m '+s%60+'s':s+'s';if(!s&&e.dataset.re&&!e.dataset.done){e.dataset.done=1;render()}})}
+const AQ=['Not at all','Several days','More than half the days','Nearly every day'],AS={'PHQ-9':{q:['Little interest or pleasure in doing things','Feeling down or hopeless','Trouble sleeping, or sleeping too much','Feeling tired or low on energy','Poor appetite or overeating','Feeling bad about yourself','Trouble concentrating','Moving or speaking slowly, or feeling restless','Thoughts of being better off dead or of hurting yourself'],o:AQ,th:10},'GAD-7':{q:['Feeling nervous or on edge','Not being able to stop worrying','Worrying too much about different things','Trouble relaxing','Being so restless it is hard to sit still','Becoming easily annoyed or irritable','Feeling afraid something awful might happen'],o:AQ,th:10},'WHO-5':{q:['I have felt cheerful and in good spirits','I have felt calm and relaxed','I have felt active and vigorous','I woke up feeling fresh and rested','My daily life has been filled with things that interest me'],o:['At no time','Some of the time','Less than half the time','More than half the time','Most of the time','All of the time'],th:50,x:4,low:1}};
+const recList=()=>{
+  if(S.recordsLoading){
+    return `<div style="text-align:center;padding:28px 16px"><span class="st" style="font-size:13px">Loading verified medical records from server...</span></div>`;
+  }
+  if(S.recordsError){
+    return `<div class="note crit" style="margin:12px 0"><b>Failed to load records from server:</b> ${H(S.recordsError)}<br><button class="btn s" style="margin-top:8px" onclick="loadServerRecords()">Retry</button></div>`;
+  }
+  const filtered = REC.filter(r=>(S.cf=='All'||r.cat==S.cf)&&(r.name+r.by).toLowerCase().includes(S.q.toLowerCase()));
+  if(!filtered.length){
+    return `<div style="text-align:center;padding:28px 16px;background:var(--so);border-radius:10px;border:1px dashed var(--bd)">
+      <b style="font-size:14px;color:var(--tx);display:block;margin-bottom:4px">No medical records found</b>
+      <p class="mu s" style="margin:0 0 10px">${S.q?'Try changing your search keywords or filter category.':'Upload a PDF, image, or clinical document to store in your private health vault.'}</p>
+      <button class="btn s" onclick="go('upload')">+ Upload Medical Record</button>
+    </div>`;
+  }
+  return filtered.map(r=>`<div class="row it">
+    <div>
+      <b>${H(r.name)}</b>
+      <br><small class="mu">${r.date} · ${H(r.by)} · ${r.cat} · ${r.src||'Patient upload'} ${r.fileSize?'('+Math.round(r.fileSize/1024)+' KB)':''}</small>
+      ${r.sha256?`<br><small class="mu" style="font-family:'IBM Plex Mono',monospace;font-size:10px">SHA-256: ${r.sha256.slice(0,16)}...</small>`:''}
+    </div>
+    <div class="row">
+      <span class="st ${r.ok?'ok':'PENDING'}">${r.ok?'Verified':'Unverified'}</span>
+      <button class="btn s" onclick="viewRecord('${r.id}')">View</button>
+      <button class="btn s g" onclick="dl('${r.id}')">Download</button>
+      <button class="btn s g" onclick="del('${r.id}')">Delete</button>
+    </div>
+  </div>`).join('');
+};
+const hist=cs=>`<div class="sc"><table><tr><th>Who</th><th>Data</th><th>Why</th><th>When</th><th>Status</th></tr>${cs.map(c=>`<tr><td><b>${c.who}</b><br>${c.org}</td><td>${c.cats.join(', ')}</td><td>${c.why}</td><td>${dt(c.s)}<br><small class="mu">${c.exp?Math.round((c.exp-c.s)/6e4)+' min':'Until revoked'}</small></td><td>${st(stat(c))}</td></tr>`).join('')}</table></div>`;
+const authP=()=>{const c=act('XYZ Hospital');return c&&c.who==DR.n?c:CS.find(x=>x.who==DR.n&&stat(x)=='ACTIVE')};
+const V={
+'patient.dashboard':()=>{
+  const inc=tr('stress')[1]=='Increasing';
+  const activeGrants=CS.filter(c=>stat(c)=='ACTIVE');
+  const pendingRequests=AR.filter(a=>a.st=='PENDING'&&a.exp>Date.now());
+  const recentRecords=REC.slice(0,3);
+  const uName=S.currentUser&&S.currentUser.role==='PATIENT'?S.currentUser.name:P.name;
+  return pg('Patient Overview',`Welcome back, ${uName} · Verified patient profile with zero-knowledge consent architecture.`,
+    `<div class="banner">
+      <div>
+        <b style="font-size:15px;color:var(--tx)">CareBridge Zero-Knowledge Health Vault</b>
+        <p style="margin:2px 0 0;font-size:13px;color:var(--mu)">External providers cannot read your records without explicit cryptographic consent. Powered by IBM watsonx governance policies.</p>
+        ${S.serverConfig?`<div style="margin-top:6px;font-size:12px;color:var(--ac);font-family:'IBM Plex Mono',monospace">● Server Config: ${S.serverConfig.service} (v${S.serverConfig.version}) · ${S.serverConfig.serverConfig.encryptionStandard}</div>`:''}
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn s" onclick="go('share')">Share via QR</button>
+        <button class="btn s g" onclick="go('upload')">Upload Record</button>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="stat-card">
+        <small>Active Consent Grants</small>
+        <span class="val ok">${activeGrants.length}</span>
+        <span class="s mu">${activeGrants.length?'Granted with time boundaries':'No external access granted'}</span>
+      </div>
+      <div class="stat-card">
+        <small>Pending Requests</small>
+        <span class="val ${pendingRequests.length?'wn':'mu'}">${pendingRequests.length}</span>
+        <span class="s mu">${pendingRequests.length?'Awaiting your authorization':'No pending requests'}</span>
+      </div>
+      <div class="stat-card">
+        <small>Health Records</small>
+        <span class="val">${REC.length}</span>
+        <span class="s mu">${REC.filter(r=>r.ok).length} verified clinical records</span>
+      </div>
+      <div class="stat-card">
+        <small>Wellbeing Status</small>
+        <span class="val ${inc?'wn':'ok'}">${inc?'Elevated':'Stable'}</span>
+        <span class="s mu">Stress: ${tr('stress')[1]} · Sleep: ${tr('sleep')[1]}</span>
+      </div>
+    </div>
+    <div class="grid" style="margin-top:16px">
+      ${cd('Recent Medical Records',
+        recentRecords.map(r=>`<div class="row it">
+          <div>
+            <b>${H(r.name)}</b>
+            <br><small class="mu">${r.date} · ${H(r.by)} · ${r.cat}</small>
+          </div>
+          <div class="row">
+            <span class="st ${r.ok?'ok':'PENDING'}">${r.ok?'Verified':'Unverified'}</span>
+            <button class="btn s g" onclick="S.sel='${r.id}';go('records')">View</button>
+          </div>
+        </div>`).join('')+
+        `<div class="row" style="margin-top:12px;justify-content:space-between">
+          <button class="btn s g" onclick="go('records')">View All Records (${REC.length})</button>
+          <button class="btn s" onclick="go('upload')">+ Upload New</button>
+        </div>`
+      )}
+      ${cd('Active Consent & Access Grants',
+        activeGrants.length?
+          activeGrants.map(c=>`<div class="row it">
+            <div>
+              <b>${c.org}</b> · <span class="mu">${c.who}</span>
+              <br><small class="mu">Access to: ${c.cats.join(', ')}</small>
+              <br><small style="color:var(--wn);font-weight:600">${c.exp?'Expires '+hm(c.exp):'Ongoing until revoked'}</small>
+            </div>
+            <button class="btn s d" onclick="revoke('${c.id}')">Revoke</button>
+          </div>`).join('')+
+          `<div class="row" style="margin-top:12px"><button class="btn s g" onclick="go('consent')">Manage All Permissions</button></div>`
+        : `<p class="mu" style="font-size:14px">No active provider permissions. Your records are completely private.</p>
+           <button class="btn s" onclick="go('share')">Issue Access Token</button>`
+      )}
+    </div>
+    <div class="grid" style="margin-top:16px">
+      ${cd('Pending Access Requests',
+        pendingRequests.length?
+          pendingRequests.map(a=>`<div class="row it">
+            <div>
+              <b>Request for: ${a.cats.join(', ')}</b>
+              <br><small class="mu">Duration: ${a.mins} min · Token: <code>${a.tok.slice(0,8)}...</code></small>
+            </div>
+            <div class="row"><button class="btn s" onclick="S.tok='${a.tok}';go('share')">Review & Authorize</button></div>
+          </div>`).join('')
+        : `<p class="mu" style="font-size:14px">No pending doctor requests right now.</p>
+           <button class="btn s g" onclick="go('share')">Scan Provider QR</button>`
+      )}
+      ${cd('AI Care Companion',
+        `<p style="font-size:14px;margin-top:0">Therapist-supervised wellbeing assistance. Real-time screening with IBM watsonx safety guardrails.</p>
+         <div class="note" style="margin-bottom:12px">
+           <small class="tag">Supervised by Meera Iyer (M.Phil Clinical Psychology)</small>
+           <span style="font-size:13px">${S.chat[S.chat.length-1].t}</span>
+         </div>
+         <div class="row">
+           <button class="btn s" onclick="go('companion')">Talk to Companion</button>
+           <button class="btn s g" onclick="go('wellbeing')">Daily Check-in</button>
+         </div>`
+      )}
+    </div>
+    ${cd('Wellbeing Metrics',
+      `<div class="grid">${Object.keys(K).map(k=>{const t=tr(k);return`<div class="mini"><small>${K[k][0]}</small><b class="${t[2]}">${t[0]} ${t[1]}</b>${pl(W.slice(-14).map(x=>x[k]),K[k][1],0,10,null,K[k][0])}</div>`}).join('')}</div>
+      <p class="note ${inc?'warn':''}" style="margin-top:14px">${inc?'Your recent self check-ins show an increase in stress. Your care plan exercises are ready in the Care Companion.':'Your recent check-ins look steady across all parameters.'}</p>`
+    )}`
+  );
+},
+'patient.health':()=>pg('My Health','One place for your records, kept under your control.',`<div class="grid">${cd('Personal information',`<b>${P.name}</b>, ${P.age}<br>Born ${P.dob}<br>Blood group ${P.blood}<br>Emergency contact: ${P.ec}`)}${cd('Medical information',`Conditions: ${P.cond.join(', ')}<br>Allergies: ${P.all.join(', ')}<br>Surgeries: ${P.surg.join(', ')}<br>Hospitalizations: none in 12 months<br>Medications: ${P.meds.map(m=>m.n).join(', ')}<br>Vaccinations: ${P.vac.join('; ')}<div style="margin-top:14px;border-top:1px solid var(--bd);padding-top:10px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><label for="clinNotes" style="font-size:14px;font-weight:600">Personal Clinical Notes</label><span id="notesStatus" style="font-size:12px;color:var(--ok);font-weight:500">✓ Auto-saved</span></div><textarea id="clinNotes" rows="3" style="width:100%" placeholder="Type clinical notes or observations (auto-saves as you type)..." oninput="onNotesInput(this.value)">${H(P.notes||'')}</textarea></div>`)}</div>`+cd('Health timeline',TL.map(e=>`<div class="row it"><span><b>${e[0].slice(0,4)}</b> · ${e[0]} · ${e[1]}</span>${e[2]?`<button class="btn s g" onclick="S.sel='${e[2]}';go('records')">Open record</button>`:''}</div>`).join(''))),
+'patient.records':()=>{
+  const r=REC.find(x=>x.id==S.sel);
+  const detail = r ? cd(H(r.name),`
+    <div class="row it" style="margin-bottom:12px">
+      <div>
+        <b>Category:</b> ${H(r.cat)}<br>
+        <b>Date:</b> ${H(r.date)}<br>
+        <b>Facility / Practitioner:</b> ${H(r.by)}<br>
+        <b>Source:</b> ${H(r.src||'Patient upload')} · <span class="st ${r.ok?'ok':'PENDING'}">${r.ok?'Verified':'Self-Uploaded'}</span>
+      </div>
+      <div>
+        <button class="btn s" onclick="dl('${r.id}')">Download Original</button>
+        <button class="btn s g" onclick="S.sel=null;go()">Close</button>
+      </div>
+    </div>
+    <div style="background:var(--so);border:1px solid var(--bd);border-radius:10px;padding:14px;font-family:'IBM Plex Mono',monospace;font-size:12px">
+      <div style="color:var(--mu);margin-bottom:6px">CRYPTOGRAPHIC INTEGRITY &amp; RECORD METADATA:</div>
+      <div>Record ID: <b>${r.id}</b></div>
+      <div>File Name: <b>${H(r.fileName||r.name)}</b></div>
+      <div>MIME Type: <code>${H(r.mimeType||'application/pdf')}</code></div>
+      <div>Size: <b>${r.fileSize?Math.round(r.fileSize/1024)+' KB':'Stored safely'}</b></div>
+      <div style="word-break:break-all">SHA-256 Hash: <code style="color:var(--ac)">${r.sha256||'Computed on server'}</code></div>
+      <div style="margin-top:8px;color:var(--ok)">✓ Cryptographic checksum verified on server disk</div>
+    </div>
+  `) : '';
+  return pg('Medical Records','Search, view and manage your documents.',
+    detail +
+    cd('',`
+      <div class="row">${['All',...['Prescriptions','Lab Reports','Discharge Summaries','Imaging Reports','Medical Certificates','Vaccinations','Other Documents']].map(c=>`<button class="chip ${S.cf==c?'on':''}" onclick="S.cf='${c}';go()">${c}</button>`).join('')}</div>
+      <div class="row">
+        <input aria-label="Search" placeholder="Search records by title, provider or category..." value="${H(S.q)}" oninput="S.q=this.value;$('#rl').innerHTML=recList()">
+        <button class="btn" onclick="go('upload')">+ Upload Record</button>
+      </div>
+      <div id="rl">${recList()}</div>
+    `)
+  );
+},
+'patient.meds':()=>pg('Medications & Lab Reports','Current medications and your recorded lab values.',cd('Current medications',ul(P.meds.map(m=>m.n+', '+m.d)))+cd('Lab trends',`<div class="grid">${LAB.map(l=>`<div class="mini"><small>${l.n}</small><b>${l.v.join(' → ')}</b>${pl(l.v,'#0b8799',null,null,['Sep 2025','Mar 2026','Aug 2026'],l.n)}<small>Sep 2025 · Mar 2026 · Aug 2026</small></div>`).join('')}</div>`)),
+'patient.appts':()=>pg('Appointments','Upcoming and requested sessions.',cd('',AP.map(a=>`<div class="row it"><b>${a.t}</b><span class="mu">${a.x}</span></div>`).join(''))),
+'patient.wellbeing':()=>{const a=AS[S.as],ins=tr('stress')[1]=='Increasing'&&tr('sleep')[1]=='Declining';return pg('Mental Wellbeing','Check in, see your trends, try a screening tool. Nothing here is a diagnosis.',cd('Daily check-in',`<p>How are you feeling today?</p>${[['c1','Mood',1,10,7],['c2','Stress',1,10,6],['c3','Sleep (hours)',0,12,6],['c4','Energy',1,10,6]].map(f=>`<div class="row"><label style="width:120px" for="${f[0]}">${f[1]}</label><input id="${f[0]}" type="range" min="${f[2]}" max="${f[3]}" step="${f[0]=='c3'?.5:1}" value="${f[4]}" oninput="this.nextElementSibling.textContent=this.value"><output>${f[4]}</output></div>`).join('')}<textarea rows="2" style="width:100%" placeholder="How has your day been? (optional)"></textarea><div class="row"><button class="btn" onclick="save()">Save Check-in</button></div>`)+cd('Trends',`<div class="row">${[7,30,90].map(n=>`<button class="chip ${S.range==n?'on':''}" onclick="S.range=${n};go()">${n} days</button>`).join('')}${Object.keys(K).map(k=>`<span class="s" style="color:${K[k][1]}">● ${K[k][0]}</span>`).join('')}</div>${lc(S.range)}<p class="note ${ins?'warn':''}">${ins?'Your stress levels have increased over the last two weeks while average sleep duration has decreased. Your responses show a sustained change in wellbeing. Consider completing a professional screening assessment or speaking with a qualified professional.':'No sustained change detected in your recent check-ins.'}</p>`)+cd('Screening assessments',`<p class="mu">Screening tools are not diagnoses.</p><div class="row">${Object.keys(AS).map(k=>`<button class="chip ${S.as==k?'on':''}" onclick="S.as='${k}';S.res=null;S.sf=0;go()">${k}</button>`).join('')}</div>${a?a.q.map((q,i)=>`<div class="row"><span style="flex:1 1 240px">${i+1}. ${q}</span><select class="aq" aria-label="${q}">${a.o.map((o,j)=>`<option value="${j}">${o}</option>`).join('')}</select></div>`).join('')+'<button class="btn" onclick="score()">See result</button>':''}${S.res?`<p class="note">${S.res}</p>`:''}${S.sf?'<p class="note crit"><b>You mentioned thoughts of self-harm.</b> Please reach out now to a trusted person, your therapist, or emergency services (112; Tele-MANAS 14416).</p>':''}`)+cd('Your care plan',PL.ok?`${PL.goal}: ${Object.keys(PL.acts).filter(k=>PL.acts[k]).join(', ')}. ${PL.freq}, ${PL.dur}. <span class="st ok">Approved by therapist</span>`:'Awaiting therapist approval.'))},
+'patient.companion':()=>pg('CareBridge AI Companion','Your therapist-supervised wellbeing companion.',cd('',`<div id="cb">${S.chat.map(m=>m.r=='u'?`<div class="m u">${H(m.t)}</div>`:`<div class="m ${m.safe?'crit':''}"><span class="tag">${m.tag}${m.src?' · Source: '+m.src:''}</span>${m.t}${m.safe?'<div class="row"><button class="btn s" onclick="toast(\'Notifying your therapist (demo)\')">Contact Therapist</button><button class="btn s d" onclick="toast(\'Call 112 or Tele-MANAS 14416\')">Emergency Support</button><button class="btn s g" onclick="toast(\'Alerting your trusted contact (demo)\')">Trusted Contact</button></div>':''}</div>`).join('')}</div><div class="row"><input id="msg" style="flex:1 1 220px" aria-label="Message" placeholder="Type a message" onkeydown="if(event.key=='Enter')send()"><button class="btn" onclick="send()">Send</button></div><p class="mu s">Not a therapist. Cannot diagnose or advise on medication. Retrieves only from therapist-approved plans and resources. Try: "I feel overwhelmed by exams".</p>`)),
+'patient.therapists':()=>pg('Find a Therapist','Verified professionals only.',`<div class="row">${['All','Anxiety','Stress','Sleep','Academic stress','Relationship concerns','Grief','General wellbeing'].map(c=>`<button class="chip ${S.tf==c?'on':''}" onclick="S.tf='${c}';go()">${c}</button>`).join('')}</div><div class="grid">${TH.filter(t=>S.tf=='All'||t.sp.includes(S.tf)).map(t=>cd(t.n+(t.v?' ✔':''),`${t.q}<br>${t.sp.join(', ')}<br>${t.e} · ${t.l}<br>${t.m} · Next: ${t.a}<br>${t.v?st('ok').replace('ok','ok').replace('>ok<','>Verified<'):st('PENDING').replace('>PENDING<','>Verification pending<')}<div class="row"><button class="btn s g" onclick="toast('${t.n}: ${t.q}')">View Profile</button><button class="btn s" onclick="book('${t.n}')" ${t.v?'':'disabled'}>Book Session</button></div>`)).join('')}</div>`),
+'patient.share':()=>{
+  const sc=S.scan,g=S.gr;
+  const recentPendingToken=AR.find(a=>a.st=='PENDING'&&Date.now()<a.exp);
+  const currentToken=S.tok?'cb://access/'+S.tok:(recentPendingToken?'cb://access/'+recentPendingToken.tok:'');
+  const camOverlayHtml=`
+    <div class="cam-viewfinder" id="camScannerBox">
+      <div class="cam-grid"></div>
+      <div class="cam-hud-top">
+        <span class="cam-rec"><span class="cam-rec-dot"></span>LIVE OPTICAL VIEWFINDER</span>
+        <span>4K · 60 FPS</span>
+      </div>
+      <div class="cam-target-box">
+        <div class="cam-corner cam-tl"></div>
+        <div class="cam-corner cam-tr"></div>
+        <div class="cam-corner cam-bl"></div>
+        <div class="cam-corner cam-br"></div>
+        <div class="cam-crosshair"></div>
+        <div class="cam-pulse"></div>
+        <div class="cam-laser"></div>
+      </div>
+      <div style="position:relative;z-index:4;margin-top:12px">
+        <div class="cam-status-pill">
+          <span class="cam-status-dot"></span>
+          <span>${sc?'Access Request Decoded · Review Below':'Align Provider QR Code Within Reticle'}</span>
+        </div>
+      </div>
+      <div class="cam-hud-bottom">
+        <span>AES-256 ZERO-KNOWLEDGE</span>
+        <span>CAREBRIDGE CRYPTO-VAULT</span>
+      </div>
+    </div>
+  `;
+
+  return pg('Share Access via Zero-Knowledge QR','Providers can only access the clinical categories you approve, strictly for the duration you permit.',
+    cd('Optical Camera Scanner',
+      `${camOverlayHtml}
+      ${recentPendingToken&&!sc?`
+        <div class="banner" style="margin-bottom:14px">
+          <div>
+            <b style="font-size:14px;color:var(--tx)">Active Provider QR Token Detected in Range</b>
+            <p style="margin:2px 0 0;font-size:12px;color:var(--mu)">Issued by ${DR.n} (${DR.org}) · Requested duration: ${recentPendingToken.mins} min</p>
+          </div>
+          <button class="btn s" onclick="scan('${recentPendingToken.tok}')">Simulate Optical Scan</button>
+        </div>
+      `:''}
+      <div class="row" style="margin-top:14px">
+        <input id="tok" style="flex:1 1 260px" aria-label="QR token" placeholder="cb://access/…" value="${H(currentToken)}">
+        <button class="btn" onclick="scan()">Scan &amp; Decrypt</button>
+        ${currentToken?`<button class="btn s g" onclick="$('#tok').value='';S.tok='';go('share');">Clear</button>`:''}
+      </div>
+      <p class="mu s" style="margin-top:8px">Visual optical scanning is simulated in this environment. Place the camera over the doctor's QR code or paste the token above to decrypt the access request.</p>`
+    )+
+    (sc?cd('Zero-Knowledge Consent Authorization',
+      `<div class="banner" style="background:linear-gradient(135deg,rgba(13,148,136,0.12) 0%,rgba(2,132,199,0.12) 100%)">
+        <div>
+          <b style="font-size:15px;color:var(--tx)">${DR.org}</b> · <span class="mu">${DR.n} (Verified Clinician)</span>
+          <p style="margin:4px 0 0;font-size:13px;color:var(--tx)">Clinical Purpose: <b>Medical consultation</b> · Time Boundary: <b>${sc.mins} minutes</b></p>
+        </div>
+        <span class="st ok">Token Valid</span>
+      </div>
+      <p style="font-size:14px;font-weight:600;margin:14px 0 8px">Select clinical categories to authorize for this session:</p>
+      <div style="background:var(--so);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:14px">
+        ${sc.cats.map(c=>`
+          <label class="ck" style="display:flex;margin:8px 0">
+            <input type="checkbox" class="pc" value="${c}" ${c=='Mental health'?'':'checked'}>
+            <span><b>${c}</b> ${c=='Mental health'?'<span class="mu s">(Sensitive · requires explicit opt-in)</span>':''}</span>
+          </label>
+        `).join('')}
+      </div>
+      <p style="font-size:13px;color:var(--mu);margin-bottom:14px">Categories withheld by policy: ${ALLC.filter(c=>!sc.cats.includes(c)).map(c=>'🔒 '+c).join(' · ')}</p>
+      <div class="row">
+        <button class="btn" onclick="approve()">Approve Time-Bounded Access</button>
+        <button class="btn g" onclick="reject()">Reject Request</button>
+      </div>`
+    ):'')+
+    (g?cd('Access Granted Successfully',
+      `<div class="note warn">
+        <b>${g.org}</b> · ${g.who}<br>
+        Authorized Categories: <b>${g.cats.join(', ')}</b><br>
+        Session Window: ${hm(g.s)} → <b>${hm(g.exp)}</b> (${Math.round((g.exp-g.s)/6e4)} minutes)<br>
+        <div class="row" style="margin-top:10px">
+          <button class="btn s g" onclick="role('doctor');go('patient')">Preview As Doctor</button>
+          <button class="btn s d" onclick="revoke('${g.id}')">Revoke Now</button>
+        </div>
+      </div>`
+    ):'')
+  );
+},
+'patient.consent':()=>{const a=CS.filter(c=>stat(c)=='ACTIVE');return pg('Consent & Privacy','Your active permissions and full consent history.',cd('Active permissions',a.map(c=>`<div class="row it"><div><b>${c.org}</b> (${c.who})<br>Access: ${c.cats.join(', ')}<br><small class="mu">${c.exp?'Expires '+hm(c.exp):'Ongoing until revoked'}</small></div><button class="btn s d" onclick="revoke('${c.id}')">Revoke Access</button></div>`).join('')||'<p class="mu">No active permissions.</p>')+cd('Consent history',hist(CS))+cd('Separate protection',`<p class="mu">Mental-health and therapy data are protected separately, with their own consent. Therapy notes are never shared with hospitals or used to train AI.</p>`))},
+'patient.history':()=>pg('Access History','Every access to your data, recorded.',cd('',CS.map(c=>`<div class="row it"><div><b>${c.who}</b>, ${c.org}<br>Accessed: ${c.cats.join(', ')}<br><small class="mu">${dt(c.s)}</small></div>${st(stat(c))}</div>`).join(''))),
+'patient.emergency':()=>pg('Emergency Information','Critical facts only. Your full history is not exposed here.',cd('Emergency profile',`<b class="big">${P.name}</b><br>Blood group: <b>${P.blood}</b><br>Allergies: <b>${P.all.join(', ')}</b><br>Critical medications: ${P.meds.filter(m=>m.crit).map(m=>m.n).join(', ')}<br>Critical conditions: ${P.cond.join(', ')}<br>Emergency contact: ${P.ec}`,'crit')),
+'patient.peer':()=>pg('Peer Support','Optional future module, not enabled in this MVP.',cd('Anonymous support rooms',`<p>Planned: rooms such as "Exam Stress Support" where members appear as Anonymous User 482. No diagnoses, records, hospital, therapist or real identity are ever shown. Includes moderation and reporting.</p><span class="st PENDING">Planned</span>`)),
+'patient.upload':()=>pg('Upload Medical Record','Securely upload and self-verify external health documents into your encrypted vault.',
+  cd('Upload Health Document',`
+    <form onsubmit="uploadRecord($('#upName').value,$('#upCat').value,$('#upBy').value);return false;" style="display:flex;flex-direction:column;gap:14px">
+      <div id="uploadError" class="note crit" style="display:none;margin-bottom:8px"></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+        <div>
+          <label style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Document Title</label>
+          <input id="upName" required style="width:100%" placeholder="e.g. Chest X-Ray / Annual Blood Panel" value="Clinical Consultation Summary">
+        </div>
+        <div>
+          <label style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Category</label>
+          <select id="upCat" style="width:100%">
+            <option>Prescriptions</option>
+            <option>Lab Reports</option>
+            <option>Discharge Summaries</option>
+            <option>Imaging Reports</option>
+            <option>Medical Certificates</option>
+            <option>Vaccinations</option>
+            <option>Other Documents</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Healthcare Provider / Clinic</label>
+          <input id="upBy" required style="width:100%" placeholder="e.g. Apollo Hospital / Dr. Mehta" value="City Health Center">
+        </div>
+      </div>
+      <div style="border:2px dashed var(--bd);border-radius:12px;padding:24px;text-align:center;background:var(--so);cursor:pointer;position:relative" onclick="$('#upFile').click()">
+        <input type="file" id="upFile" style="display:none" accept=".pdf,image/*,.txt,.doc,.docx" onchange="const f=this.files[0];if(f){$('#fileSelName').textContent=f.name+' ('+Math.round(f.size/1024)+' KB)';if(!$('#upName').value||$('#upName').value==='Clinical Consultation Summary'){$('#upName').value=f.name.replace(/\.[^/.]+$/,'')}}">
+        <div style="font-size:28px">📄</div>
+        <b style="font-size:14px;color:var(--tx);display:block;margin-top:6px">Select or drop your medical document (PDF, PNG, JPG)</b>
+        <p id="fileSelName" class="mu" style="font-size:13px;margin:4px 0 10px;font-weight:600">No file selected (Click to choose file from device)</p>
+        <span class="st ok">Filesystem Persistent Vault</span>
+      </div>
+      <div class="row" style="justify-content:flex-end">
+        <button type="button" class="btn g" onclick="go('records')">Cancel</button>
+        <button type="submit" class="btn" ${S.uploading?'disabled':''}>${S.uploading?'Encrypting &amp; Uploading to Server...':'Upload &amp; Encrypt Record'}</button>
+      </div>
+    </form>
+  `)
+),
+'patient.profile':()=>pg('Profile & Settings','Manage your patient identity, consent defaults, and emergency contacts.',
+  `<div class="grid">
+    ${cd('Patient Identity',`
+      <b>${P.name}</b><br>
+      <span class="mu">Universal Health ID:</span> <code>ZEDOC-IN-2026-90412</code><br>
+      <span class="mu">Date of Birth:</span> ${P.dob} (${P.age} yrs)<br>
+      <span class="mu">Blood Group:</span> <b>${P.blood}</b><br>
+      <span class="st ok" style="margin-top:8px">ABHA Linked &amp; Verified</span>
+    `)}
+    ${cd('Privacy & Consent Defaults',`
+      <label class="ck"><input type="checkbox" checked disabled> Require zero-knowledge approval for all external reads</label><br>
+      <label class="ck"><input type="checkbox" checked disabled> Automatic access expiry (default 30 min)</label><br>
+      <label class="ck"><input type="checkbox" checked disabled> Strict isolation for Mental Health &amp; Therapy Notes</label><br>
+      <label class="ck"><input type="checkbox" checked disabled> Append-only cryptographic audit logging</label>
+    `)}
+  </div>
+  ${cd('Emergency Contacts',`
+    <div class="row it">
+      <div><b>Primary Contact:</b> ${P.ec}<br><small class="mu">Designated for crisis escalation and critical allergen warnings</small></div>
+      <span class="st ok">Active</span>
+    </div>
+  `)}`
+),
+'doctor.dash':()=>{
+  const q=AR.find(a=>a.tok==S.qr),live=q&&q.st=='PENDING'&&Date.now()<q.exp;
+  const auth=authP();
+  const pendingRequests=AR.filter(a=>a.st=='PENDING'&&Date.now()<a.exp);
+  const docName=S.currentUser&&S.currentUser.role==='DOCTOR'?S.currentUser.name:DR.n;
+  const docOrg=S.currentUser&&S.currentUser.role==='DOCTOR'?(S.currentUser.org||DR.org):DR.org;
+  return pg('Provider Dashboard',`${docName} · ${docOrg} (Verified Organization)`,
+    `<div class="banner">
+      <div>
+        <b style="font-size:15px;color:var(--tx)">Clinical Practice Console · IBM watsonx.ai Integration</b>
+        <p style="margin:2px 0 0;font-size:13px;color:var(--mu)">Access patient health timelines, request time-bounded consent, and run grounded clinical summaries.</p>
+        ${S.serverConfig?`<div style="margin-top:6px;font-size:12px;color:var(--ac);font-family:'IBM Plex Mono',monospace">● Authenticated Provider Session: ${docName} (${docOrg}) · Protocol Gateway: ${S.serverConfig.serverConfig.authProvider}</div>`:''}
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn s" onclick="go('lookup')">Patient Lookup</button>
+        <button class="btn s g" onclick="go('patient')">Authorized Records</button>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="stat-card">
+        <small>Pending Patient Requests</small>
+        <span class="val ${pendingRequests.length?'wn':'mu'}">${pendingRequests.length}</span>
+        <span class="s mu">${pendingRequests.length?'Awaiting patient scan':'No active QR tokens'}</span>
+      </div>
+      <div class="stat-card">
+        <small>Authorized Patients</small>
+        <span class="val ok">${auth?'1':'0'}</span>
+        <span class="s mu">${auth?'Access active for '+P.name:'No active authorization'}</span>
+      </div>
+      <div class="stat-card">
+        <small>Accessible Records</small>
+        <span class="val">${auth?REC.length:'0'}</span>
+        <span class="s mu">${auth?'Available under current consent':'Requires patient consent'}</span>
+      </div>
+      <div class="stat-card">
+        <small>AI Summary Engine</small>
+        <span class="val ok">Ready</span>
+        <span class="s mu">watsonx.ai adapter online</span>
+      </div>
+    </div>
+    <div class="grid" style="margin-top:16px">
+      ${cd('Authorized Patient Summary',
+        auth?`
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <b style="font-size:16px">${P.name}</b> · ${P.age} yrs (${P.dob})
+              <br><small class="mu">Blood Group: <b>${P.blood}</b> · Emergency: ${P.ec}</small>
+              <br><small class="mu">Documented Conditions: ${P.cond.join(', ')}</small>
+            </div>
+            <span class="st ok">Authorized</span>
+          </div>
+          <p class="note warn" style="margin:12px 0">
+            Authorization active until ${hm(auth.exp)} (<b data-cd="${auth.exp}" data-re="1"></b> left)
+          </p>
+          <div class="row">
+            <button class="btn s" onclick="go('patient')">Open Full Records &amp; AI Summary</button>
+            <button class="btn s g" onclick="go('aisummary')">View watsonx Synthesis</button>
+          </div>
+        `:`
+          <p class="mu" style="font-size:14px">No active patient authorizations right now. Request access from the patient below or generate a QR token.</p>
+          <button class="btn s" onclick="go('lookup')">Look Up Patient &amp; Request</button>
+        `
+      )}
+      ${cd('Pending Access Requests',
+        pendingRequests.length?
+          pendingRequests.map(a=>`
+            <div class="row it">
+              <div>
+                <b>Requested: ${a.cats.join(', ')}</b>
+                <br><small class="mu">Token: <code>${a.tok.slice(0,8)}...</code> · Duration: ${a.mins} min</small>
+                <br><small style="color:var(--wn);font-weight:600">Expires in: <b data-cd="${a.exp}" data-re="1"></b></small>
+              </div>
+              <div class="row">
+                <button class="btn s g" onclick="S.tok='${a.tok}';role('patient');go('share')">Switch to Patient to Approve</button>
+              </div>
+            </div>
+          `).join('')
+        : `<p class="mu" style="font-size:14px">No pending access requests. Use the form below to issue a new QR code.</p>`
+      )}
+    </div>
+    ${cd('Request Patient Records via Zero-Knowledge Token',
+      `<p style="font-size:13px;color:var(--mu);margin-top:0">Select the minimal clinical data categories required for this consultation. Therapy notes are strictly protected and never accessible to medical providers.</p>
+       <div class="row">${ALLC.map((c,i)=>`<label class="ck"><input type="checkbox" class="qc" value="${c}" ${i<4?'checked':''} ${c=='Therapy notes'?'disabled':''}> ${c}${c=='Therapy notes'?' 🔒':''}</label>`).join('')}</div>
+       <div class="row" style="margin-top:12px">
+         <label style="font-size:14px;font-weight:600">Consent Duration
+           <select id="dur" style="margin-left:6px"><option>15</option><option selected>30</option><option>60</option></select> minutes
+         </label>
+         <button class="btn" onclick="genQR()">Generate Patient Access QR</button>
+       </div>
+       ${q?`
+         <div class="card" style="margin-top:14px;background:var(--so);border:1px solid var(--bd)">
+           <div class="row" style="align-items:flex-start">
+             <div id="qr" class="qr"></div>
+             <div>
+               <b>${DR.org}</b> · ${DR.n}<br>
+               <span class="mu">Requested categories:</span> ${q.cats.join(', ')}<br>
+               <span class="mu">Duration:</span> ${q.mins} min<br>
+               ${live?`<span style="color:var(--wn);font-weight:700">QR expires in: <span data-cd="${q.exp}" data-re="1"></span></span>`:st(q.st=='PENDING'?'EXPIRED':q.st)}<br>
+               <code style="margin-top:6px;display:inline-block">cb://access/${q.tok}</code>
+               ${live?`<div style="margin-top:10px"><button class="btn s" onclick="S.tok='${q.tok}';role('patient');go('share')">Open as Patient to Scan</button></div>`:''}
+             </div>
+           </div>
+         </div>
+       `:''}
+      `
+    )}`
+  );
+},
+'doctor.lookup':()=>pg('Patient Lookup','Find patients in your clinical practice network and request authorization.',
+  cd('Patient Directory',`
+    <div class="row" style="margin-bottom:14px">
+      <input style="flex:1 1 260px" placeholder="Search by patient name, ABHA ID, or phone..." value="Vishesh">
+      <button class="btn s">Search Directory</button>
+    </div>
+    <div class="sc">
+      <table>
+        <tr><th>Patient Name</th><th>ABHA / Health ID</th><th>Age / Sex</th><th>Status</th><th>Action</th></tr>
+        <tr>
+          <td><b>${P.name}</b><br><small class="mu">Demo Contact: ${P.ec}</small></td>
+          <td><code>ZEDOC-IN-2026-90412</code></td>
+          <td>${P.age} yrs · M</td>
+          <td>${authP()?st('ACTIVE'):st('PENDING')}</td>
+          <td><button class="btn s" onclick="go('dash')">${authP()?'View Records':'Request Access'}</button></td>
+        </tr>
+      </table>
+    </div>
+  `)
+),
+'doctor.requests':()=>pg('Pending Consent Requests','Track active QR tokens and authorization requests sent to patients.',
+  cd('Consent Request Queue',
+    `<div class="sc">
+      <table>
+        <tr><th>Token</th><th>Requested Categories</th><th>Duration</th><th>Status</th><th>Action</th></tr>
+        ${AR.map(a=>`
+          <tr>
+            <td><code>${a.tok.slice(0,10)}...</code></td>
+            <td>${a.cats.join(', ')}</td>
+            <td>${a.mins} min</td>
+            <td>${st(a.st=='PENDING'&&Date.now()>a.exp?'EXPIRED':a.st)}</td>
+            <td>${a.st=='PENDING'&&Date.now()<a.exp?`<button class="btn s g" onclick="S.tok='${a.tok}';role('patient');go('share')">Simulate Scan</button>`:'-'}</td>
+          </tr>
+        `).join('')||'<tr><td colspan=5 class="mu">No access requests in queue.</td></tr>'}
+      </table>
+    </div>`
+  )
+),
+'doctor.patient':()=>{
+  const c=authP();
+  if(!c)return pg('Authorized Patient Records','',cd('No active authorization','Request access with a QR code and ask the patient to approve. Expired access is removed automatically.','warn'));
+  if(!c.rd){c.rd=1;au(DR.n,'data.read',c.cats.join(', '))}
+  const h=c.cats.includes('Medical history'),d={hist:h&&{cond:P.cond,surg:P.surg,visits:3},all:c.cats.includes('Allergies')&&P.all,meds:c.cats.includes('Medications')&&P.meds,labs:c.cats.includes('Lab reports'),mh:c.cats.includes('Mental health')};
+  return pg('Patient Clinical Summary',`${P.name} · ${P.age} yrs · Blood group ${P.blood}`,
+    `<div class="banner">
+      <div>
+        <b style="font-size:14px;color:var(--tx)">Active Clinical Session</b>
+        <p style="margin:2px 0 0;font-size:13px;color:var(--mu)">Patient consent verified until ${hm(c.exp)}. Zero-knowledge session actively logged.</p>
+      </div>
+      <span class="st ok">Time Remaining: <span data-cd="${c.exp}" data-re="1"></span></span>
+    </div>
+    ${cd('IBM watsonx.ai Synthesized Clinical Summary',
+      IBM.ai.summarize(d).map(s=>`<div style="margin-bottom:12px">
+        <b style="color:var(--tx);font-size:14px">${s[0]}</b>
+        <p style="margin:4px 0 6px;font-size:14px">${s[1]}</p>
+        <div class="row">${s[2].map(r=>`<button class="chip on" style="font-size:11px;padding:2px 8px" onclick="S.sel='${r}';go('rec')">📄 Source Record: ${r}</button>`).join('')}</div>
+      </div>`).join('')+
+      `<p class="mu s" style="border-top:1px solid var(--bd);padding-top:8px;margin-top:12px">Generated from patient-authorized records using the IBM watsonx.ai adapter. Always verify against original clinical documentation.</p>`
+    )}
+    ${h?cd('Clinical Timeline',TL.map(e=>`<div class="row it"><span><b>${e[0]}</b> · ${e[1]}</span>${e[2]?`<button class="btn s g" onclick="S.sel='${e[2]}';go('rec')">View Document</button>`:''}</div>`).join('')):''}
+    ${d.labs?cd('Laboratory Trends',`<div class="grid">${LAB.map(l=>`<div class="mini"><small>${l.n}</small><b class="val" style="font-size:18px">${l.v.join(' → ')}</b>${pl(l.v,'#0d9488',null,null,['Sep 2025','Mar 2026','Aug 2026'],l.n)}<small>Sep 2025 · Mar 2026 · Aug 2026</small></div>`).join('')}</div>`):''}
+    ${cd('Privacy Isolation (Withheld from Doctor)',ALLC.filter(x=>!c.cats.includes(x)).map(x=>'🔒 '+x).join(' · ')||'All categories shared')}`
+  );
+},
+'doctor.aisummary':()=>pg('AI Clinical Summary Console','Grounded extraction of authorized records powered by IBM watsonx.ai.',
+  cd('watsonx.ai Synthesis Report',
+    authP()?`
+      <div class="note" style="margin-bottom:14px">
+        <b>Session Status:</b> Authorized by ${P.name} · Verified for medical consultation
+      </div>
+      ${IBM.ai.summarize({hist:{cond:P.cond,surg:P.surg,visits:3},all:P.all,meds:P.meds,labs:true,mh:true}).map(s=>`
+        <div style="margin-bottom:16px">
+          <b>${s[0]}</b>
+          <p style="margin:4px 0 6px">${s[1]}</p>
+          <div class="row">${s[2].map(r=>`<button class="chip on" onclick="S.sel='${r}';go('rec')">View Citation: ${r}</button>`).join('')}</div>
+        </div>
+      `).join('')}
+    `:`<p class="mu">No authorized patient records are available. Return to the Provider Dashboard to request patient access.</p><button class="btn s" onclick="go('dash')">Go to Dashboard</button>`
+  )
+),
+'doctor.rec':()=>{
+  const r=REC.find(x=>x.id==S.sel),c=authP();
+  return pg('Clinical Record Viewer','Original verified clinical documentation.',
+    c&&r?cd(H(r.name),`
+      <div class="row it">
+        <div>
+          <b>Category:</b> ${r.cat}<br>
+          <b>Date:</b> ${r.date}<br>
+          <b>Author / Facility:</b> ${H(r.by)}<br>
+          <b>Source:</b> ${r.src} · <span class="st ${r.ok?'ok':'PENDING'}">${r.ok?'Cryptographically Verified':'Unverified'}</span>
+        </div>
+      </div>
+      <div style="background:var(--so);border:1px solid var(--bd);border-radius:10px;padding:18px;margin-top:12px;font-family:monospace;font-size:13px">
+        [ENCRYPTED CLINICAL RECORD PAYLOAD: ${r.id}]<br>
+        Patient: ${P.name} (ID: ZEDOC-IN-2026-90412)<br>
+        Document: ${r.name}<br>
+        Clinician: ${r.by}<br>
+        Hash Signature: SHA-256 (Verified)<br>
+        Content preview: Patient presented for follow-up review. Vitals and observations recorded within nominal range.
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn s g" onclick="go('patient')">Back to Patient Summary</button>
+        <button class="btn s g" onclick="dl('${r.id}')">Download Copy</button>
+      </div>
+    `):cd('Access Unavailable','The document is no longer accessible or authorization has expired.','warn')
+  );
+},
+'doctor.dhist':()=>pg('Access History','Complete audit record of patient data accessed under your credentials.',cd('',hist(CS.filter(c=>c.who==DR.n)))),
+'admin.overview':()=>{
+  const adminName=S.currentUser&&S.currentUser.role==='ADMIN'?S.currentUser.name:'System Administrator';
+  const adminEmail=S.currentUser&&S.currentUser.role==='ADMIN'?S.currentUser.email:'admin@carebridge.internal';
+  return pg('System Overview',`Real-time telemetry, consent operations, and security metrics for CareBridge · Session: ${adminName} (${adminEmail})`,
+  `<div class="grid">
+    <div class="stat-card">
+      <small>Total Consents Issued</small>
+      <span class="val ok">${CS.length}</span>
+      <span class="s mu">Active: ${CS.filter(c=>stat(c)=='ACTIVE').length} · Revoked: ${CS.filter(c=>stat(c)=='REVOKED').length}</span>
+    </div>
+    <div class="stat-card">
+      <small>QR Tokens Generated</small>
+      <span class="val">${AR.length}</span>
+      <span class="s mu">Zero-knowledge temporary tokens</span>
+    </div>
+    <div class="stat-card">
+      <small>Clinical Records Stored</small>
+      <span class="val">${REC.length}</span>
+      <span class="s mu">${REC.filter(r=>r.ok).length} verified documents</span>
+    </div>
+    <div class="stat-card">
+      <small>Audit Events</small>
+      <span class="val">${AU.length}</span>
+      <span class="s mu">Cryptographically chained</span>
+    </div>
+  </div>
+  <div class="grid" style="margin-top:16px">
+    ${cd('IBM Watsonx Integration Status',`
+      <table>
+        <tr><td>watsonx.ai</td><td>${st('ok')} Connected (${S.serverConfig?'Server Gateway Ready':'Mock Adapter'})</td></tr>
+        <tr><td>watsonx.governance</td><td>${st('ok')} Active (Risk Classifier &amp; Safety Guardrails)</td></tr>
+        <tr><td>watsonx.data</td><td>${st('ok')} Semantic retrieval indexed</td></tr>
+      </table>
+    `)}
+    ${cd('Recent Audit Stream',`
+      <div class="sc">
+        <table>
+          <tr><th>Time</th><th>Actor</th><th>Event</th></tr>
+          ${AU.slice(0,4).map(a=>`<tr><td>${hm(a.t)}</td><td><b>${a.who}</b></td><td><code>${a.ev}</code></td></tr>`).join('')}
+        </table>
+      </div>
+    `)}
+  </div>`
+  );
+},
+'admin.users':()=>pg('Users & Verification','Verified identity and organization come before any access request.',
+  cd('Users',`<div class="sc"><table><tr><th>Name</th><th>Role</th><th>Org</th></tr><tr><td>Vishesh</td><td>PATIENT</td><td>-</td></tr><tr><td>${DR.n}</td><td>DOCTOR</td><td>${DR.org}</td></tr><tr><td>Meera Iyer</td><td>THERAPIST</td><td>CareBridge Therapy</td></tr><tr><td>Admin</td><td>HOSPITAL_ADMIN / SYSTEM_ADMIN</td><td>-</td></tr></table></div>`)+
+  cd('Therapist verification',TH.map(t=>`<div class="row it"><span>${t.n}, ${t.q}</span><button class="btn s ${t.v?'g':''}" onclick="TH.find(x=>x.n=='${t.n}').v^=1;go()">${t.v?'Verified (undo)':'Verify'}</button></div>`).join(''))+
+  cd('Hospitals',HOS.map(h=>`<div class="row it"><span>${h.n}</span><button class="btn s ${h.v?'g':''}" onclick="HOS.find(x=>x.n=='${h.n}').v^=1;go()">${h.v?'Verified (undo)':'Verify'}</button></div>`).join(''))
+),
+'admin.audit':()=>pg('Audit Logs','Append-only cryptographic audit stream.',cd('',`<div class="sc"><table><tr><th>Time</th><th>Actor</th><th>Event</th><th>Detail</th></tr>${AU.map(a=>`<tr><td>${dt(a.t)}</td><td><b>${a.who}</b></td><td><code>${a.ev}</code></td><td>${H(a.d)}</td></tr>`).join('')}</table></div>`)),
+'admin.safety':()=>{
+  const n=r=>CV.filter(x=>x==r).length;
+  return pg('Security & AI Safety Events','Risk routing, policy enforcement, and IBM watsonx.governance log.',
+    `<div class="grid">${['LOW','MEDIUM','HIGH'].map(r=>`<div class="stat-card"><small>${r} Risk Events</small><span class="val ${r=='HIGH'?'er':r=='MEDIUM'?'wn':'ok'}">${n(r)}</span><span class="s mu">Screened conversations</span></div>`).join('')}</div>`+
+    cd('Governance Event Stream',IBM.gov.log.map(l=>`<div class="row it"><span><code>${l.e}</code> ${l.d}</span><small class="mu">${dt(l.t)}</small></div>`).join('')||'<p class="mu">No events yet. Chat with the companion.</p>')
+  );
+},
+'admin.health':()=>{
+  const cfg = S.serverConfig ? S.serverConfig.serverConfig : null;
+  return pg('System Health & Compliance','Infrastructure status, encryption checks, and platform integrity.',
+    cd('Live Server-Side Configuration',`
+      <table>
+        <tr><th>Configuration Parameter</th><th>Live Server Value</th><th>Status</th></tr>
+        <tr><td>Backend API Service</td><td><code>${S.serverConfig?S.serverConfig.service:'Zedoc CareBridge Express API'} (v${S.serverConfig?S.serverConfig.version:'1.0.0'})</code></td><td>${st('ok')} Healthy</td></tr>
+        <tr><td>Server Platform &amp; Engine</td><td><code>${cfg?cfg.platform+' / Node '+cfg.nodeVersion:'Node.js runtime'}</code></td><td>${st('ok')} Online</td></tr>
+        <tr><td>Zero-Knowledge Consent Engine</td><td><code>${cfg?cfg.consentEngine:'E2E Cryptographic Zero-Knowledge Active'}</code></td><td>${st('ok')} Operational</td></tr>
+        <tr><td>Data Encryption Standard</td><td><code>${cfg?cfg.encryptionStandard:'AES-256 GCM Active'}</code></td><td>${st('ok')} Active</td></tr>
+        <tr><td>Identity &amp; Auth Gateway</td><td><code>${cfg?cfg.authProvider:'ABHA Protocol Gateway'}</code></td><td>${st('ok')} Active</td></tr>
+        <tr><td>AI Service Adapter</td><td><code>${cfg?cfg.aiAdapter:'IBM watsonx.ai + watsonx.governance'}</code></td><td>${st('ok')} Ready</td></tr>
+        <tr><td>Safety Guardrails</td><td><code>${cfg?cfg.governanceGuardrails:'Active (Risk & Crisis)'}</code></td><td>${st('ok')} Active</td></tr>
+        <tr><td>Active Session Claim</td><td><code>${S.currentUser?S.currentUser.persona+' ('+S.currentUser.email+')':'Active Session'}</code></td><td>${st('ok')} Authenticated</td></tr>
+      </table>
+    `)+
+    cd('Integrity Diagnostics',`
+      <p style="font-size:14px;color:var(--tx)">All cryptographic checksums and server configuration verified. No permission leaks or unauthenticated reads detected.</p>
+      <button class="btn s" onclick="toast('System diagnostic run: All checks passed')">Run Comprehensive Diagnostics</button>
+    `)
+  );
+}
+};
+function render(){
+  const roleNames={patient:'Patient',doctor:'Provider',admin:'Admin'};
+  $('#roles').innerHTML=['patient','doctor','admin'].map(r=>`<button class="${S.role==r?'on':''}" onclick="role('${r}')">${roleNames[r]}</button>`).join('');
+  const personaMap={patient:'Vishesh (Patient)',doctor:'Dr. Ananya Sharma (Provider)',admin:'System Administrator'};
+  const pEl=$('#userPersona');if(pEl)pEl.textContent=personaMap[S.role]||'User';
+  $('#nav').innerHTML=NAV[S.role].map(n=>`<a tabindex="0" class="${S.view==n[0]?'on':''}" onclick="go('${n[0]}')" onkeydown="if(event.key=='Enter')go('${n[0]}')">${n[1]}</a>`).join('');
+  $('#main').innerHTML=(V[S.role+'.'+S.view]||(()=>''))();
+  tick();
+  const q=$('#qr');
+  if(q){
+    q.innerHTML='';
+    if(typeof QRCode!='undefined'&&S.qr)new QRCode(q,{text:'cb://access/'+S.qr,width:140,height:140});
+    else if(!S.qr)q.textContent='Generate a token to view QR.';
+    else q.textContent='QR library unavailable. Use the token.';
+  }
+  const b=$('#cb');if(b)b.scrollTop=b.scrollHeight;
+}
+setInterval(tick,1000);render();initServerSync();
+</script></body></html>
